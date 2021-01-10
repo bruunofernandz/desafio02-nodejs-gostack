@@ -26,7 +26,7 @@ app.post("/repositories", (request, response) => {
 
 app.put("/repositories/:id", (request, response) => {
   const { id } = request.params;
-  const { title, url, techs } = request.body;
+  const { title, url, techs, likes } = request.body;
 
   const repoIndex = repositories.findIndex(repo => repo.id === id);
 
@@ -36,9 +36,9 @@ app.put("/repositories/:id", (request, response) => {
     return response.status(401).json({ warning: "You need insert a info for update" });
   }
 
-  // if(likes >= 0 || likes <= 0) {
-  //   return response.status(401).json({ warning: "You can't change of like numbers" });
-  // }
+  if(likes >= 0 || likes <= 0) {
+    return response.status(401).json({ warning: "You can't change of like numbers" });
+  }
   
   const updatedRepo = {
     id: repositories[repoIndex].id,
