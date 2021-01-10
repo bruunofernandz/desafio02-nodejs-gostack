@@ -26,19 +26,11 @@ app.post("/repositories", (request, response) => {
 
 app.put("/repositories/:id", (request, response) => {
   const { id } = request.params;
-  const { title, url, techs, likes } = request.body;
+  const { title, url, techs } = request.body;
 
   const repoIndex = repositories.findIndex(repo => repo.id === id);
 
   if(repoIndex < 0) return response.status(400).json({ error: "Project not found" });
-
-  if(title == undefined && url == undefined && techs == undefined) {
-    return response.status(401).json({ warning: "You need insert a info for update" });
-  }
-
-  if(likes >= 0 || likes <= 0) {
-    return response.status(401).json({ warning: "You can't change of like numbers" });
-  }
   
   const updatedRepo = {
     id: repositories[repoIndex].id,
@@ -72,17 +64,17 @@ app.post("/repositories/:id/like", (request, response) => {
 
   if(repoIndex < 0) return response.status(400).json({ error: "Project not found" });
 
-  const likerepo = {
-    id,
-    title: repositories[repoIndex].title,
-    url: repositories[repoIndex].url,
-    techs: repositories[repoIndex].techs,
-    likes: repositories[repoIndex].likes + 1,
-  }
+  // const likerepo = {
+  //   id,
+  //   title: repositories[repoIndex].title,
+  //   url: repositories[repoIndex].url,
+  //   techs: repositories[repoIndex].techs,
+  //   likes: repositories[repoIndex].likes + 1,
+  // }
 
-  repositories[repoIndex] = likerepo;
+  repositories[repoIndex].likes += 1;
 
-  return response.status(200).json(likerepo.likes);
+  return response.status(200).json(repositories[repoIndex]);
 });
 
 module.exports = app;
